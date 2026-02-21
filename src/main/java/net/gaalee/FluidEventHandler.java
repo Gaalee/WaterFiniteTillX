@@ -1,8 +1,7 @@
 package net.gaalee;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,7 +24,7 @@ public class FluidEventHandler {
     @SubscribeEvent
     public static void onCreateFluidSource(CreateFluidSourceEvent event) {
         if (event.getFluidState().is(Fluids.WATER)) {
-            Level level = (Level) event.getLevel();
+            var level = event.getLevel();
             BlockPos pos = event.getPos();
 
             long currentTime = System.currentTimeMillis();
@@ -86,7 +85,7 @@ public class FluidEventHandler {
         LARGE_BODY_CACHE.entrySet().removeIf(entry -> currentTime >= entry.getValue());
     }
 
-    private static boolean isLargeBodyOfWater(Level level, BlockPos pos) {
+    private static boolean isLargeBodyOfWater(LevelAccessor level, BlockPos pos) {
         int requiredSources = Config.requiredSources;
         int maxScan = 1000;
         long maxTimeNs = 500000; // 0.5ms (500,000 ns)
@@ -109,6 +108,7 @@ public class FluidEventHandler {
             }
 
             BlockPos current = queue.poll();
+            if (current == null) continue;
             checkedCount++;
 
             // Cardinal directions without array allocation
@@ -128,7 +128,7 @@ public class FluidEventHandler {
         return false;
     }
 
-    private static void checkNeighbor(Level level, BlockPos neighbor, Set<BlockPos> visited, Queue<BlockPos> queue) {
+    private static void checkNeighbor(LevelAccessor level, BlockPos neighbor, Set<BlockPos> visited, Queue<BlockPos> queue) {
         if (!visited.contains(neighbor)) {
             visited.add(neighbor);
             if (level.getFluidState(neighbor).isSourceOfType(Fluids.WATER)) {
@@ -137,7 +137,7 @@ public class FluidEventHandler {
         }
     }
 
-    private static int countAdjacentSources(Level level, BlockPos pos) {
+    private static int countAdjacentSources(LevelAccessor level, BlockPos pos) {
         int count = 0;
         // Check 6 directions quickly
         if (level.getFluidState(pos.north()).isSourceOfType(Fluids.WATER)) count++;

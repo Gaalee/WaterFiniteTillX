@@ -1,14 +1,11 @@
 package net.gaalee;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 /**
  * WaterFiniteTillX mod configuration.
  */
-@EventBusSubscriber(modid = waterfinitetillx.MODID)
 public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
@@ -24,8 +21,9 @@ public class Config {
 
     public static int requiredSources;
 
-    @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
-        requiredSources = REQUIRED_SOURCES.get();
+        if (event.getConfig().getSpec() == SPEC) {
+            requiredSources = REQUIRED_SOURCES.get();
+        }
     }
 }
