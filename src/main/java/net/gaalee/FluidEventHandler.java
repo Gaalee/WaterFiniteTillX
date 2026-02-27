@@ -24,6 +24,11 @@ public class FluidEventHandler {
     @SubscribeEvent
     public static void onCreateFluidSource(CreateFluidSourceEvent event) {
         if (event.getFluidState().is(Fluids.WATER)) {
+            // If requiredSources is 0, behave like vanilla (allow source creation)
+            if (Config.requiredSources == 0) {
+                return;
+            }
+
             var level = event.getLevel();
             BlockPos pos = event.getPos();
 

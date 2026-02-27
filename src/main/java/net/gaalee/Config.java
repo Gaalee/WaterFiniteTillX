@@ -13,9 +13,9 @@ public class Config {
     static final ModConfigSpec SPEC;
 
     static {
-        REQUIRED_SOURCES = BUILDER.comment("Number of connected water sources required (via BFS) to allow a new source")
+        REQUIRED_SOURCES = BUILDER.comment("Number of connected water sources to be considered a infinite body of water.")
                 .translation("waterfinitetillx.config.requiredSources")
-                .defineInRange("requiredSources", 100, 2, 2000);
+                .defineInRange("requiredSources", 100, 0, 2000);
         SPEC = BUILDER.build();
     }
 

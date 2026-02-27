@@ -1,4 +1,4 @@
 {
   "waterfinitetillx.config.requiredSources": "Required sources",
-  "waterfinitetillx.config.requiredSources.tooltip": "The number of connected water sources required to allow the creation of a new infinite source (BFS algorithm)."
+  "waterfinitetillx.config.requiredSources.tooltip": "Number of connected water sources to be considered a infinite body of water. Set to 0 for vanilla behavior."
 }
